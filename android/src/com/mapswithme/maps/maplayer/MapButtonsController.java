@@ -112,8 +112,10 @@ public class MapButtonsController
     // Reduce buttons margin to move them only if necessary
     // Zoom frame is above the layers so if must move twice as much
     final float appliedMarginTranslationLayers = Math.min(-appliedTranslation, mInitialButtonMargin);
-    final float appliedMarginTranslationZoomFrame = Math.min(-appliedTranslation, 2 * mInitialButtonMargin);
+    final float maxZoomTranslation = UiUtils.isVisible(mLayersButton) ? 2 * mInitialButtonMargin : mInitialButtonMargin;
+    final float appliedMarginTranslationZoomFrame = Math.min(-appliedTranslation, maxZoomTranslation);
     mLayersButton.setTranslationY(appliedMarginTranslationLayers);
+    mSearchButtonFrame.setTranslationY(appliedMarginTranslationLayers);
     mZoomFrame.setTranslationY(appliedMarginTranslationZoomFrame);
 
     updateButtonsVisibility(appliedTranslation);
