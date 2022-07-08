@@ -5,6 +5,7 @@ import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import com.mapswithme.maps.widget.placepage.PlacePageController;
 
 public class NavigationButtonsAnimationController
 {
@@ -13,10 +14,15 @@ public class NavigationButtonsAnimationController
 
   @Nullable
   private final OnTranslationChangedListener mTranslationListener;
-  private float mContentHeight;
   private final float mBottomMargin;
+  private final PlacePageController mPlacePageController;
+  private final int mButtonWidth;
+  private float mContentHeight;
+  private float mContentWidth;
 
   public NavigationButtonsAnimationController(@NonNull View frame,
+                                              PlacePageController placePageController,
+                                              int buttonWidth,
                                               @Nullable OnTranslationChangedListener translationListener)
   {
     mFrame = frame;
@@ -26,15 +32,24 @@ public class NavigationButtonsAnimationController
     mTranslationListener = translationListener;
     RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) frame.getLayoutParams();
     mBottomMargin = lp.bottomMargin;
+    mButtonWidth = buttonWidth;
+    mPlacePageController = placePageController;
+  }
+
+  private boolean isScreenWideEnough()
+  {
+    return mContentWidth > (mPlacePageController.getPlacePageWidth() + 2 * mButtonWidth);
   }
 
   public void move(float translationY)
   {
-    if (mContentHeight == 0)
+    if (mContentHeight == 0 || isScreenWideEnough())
       return;
 
     final float translation = mBottomMargin + translationY - mContentHeight;
-    update(translation <= 0 ? translation : 0);
+    final float appliedTranslation = translation <= 0 ? translation : 0;
+    mFrame.setTranslationY(appliedTranslation);
+    update(appliedTranslation);
   }
 
   public void update()
@@ -44,8 +59,6 @@ public class NavigationButtonsAnimationController
 
   private void update(final float translation)
   {
-    mFrame.setTranslationY(translation);
-
     if (mTranslationListener != null)
       mTranslationListener.onTranslationChanged(translation);
   }
@@ -70,6 +83,7 @@ public class NavigationButtonsAnimationController
                                int oldTop, int oldRight, int oldBottom)
     {
       mContentHeight = bottom - top;
+      mContentWidth = right - left;
       mContentView.removeOnLayoutChangeListener(this);
     }
   }

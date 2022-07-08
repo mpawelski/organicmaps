@@ -13,6 +13,7 @@ import com.mapswithme.maps.R;
 import com.mapswithme.maps.routing.RoutingController;
 import com.mapswithme.maps.routing.SearchWheel;
 import com.mapswithme.maps.widget.menu.MyPositionButton;
+import com.mapswithme.maps.widget.placepage.PlacePageController;
 import com.mapswithme.util.Config;
 import com.mapswithme.util.Graphics;
 import com.mapswithme.util.UiUtils;
@@ -40,7 +41,7 @@ public class MapButtonsController
 
   private float mTopLimit;
 
-  public MapButtonsController(@NonNull View frame, AppCompatActivity activity, MapButtonClickListener mapButtonClickListener)
+  public MapButtonsController(@NonNull View frame, AppCompatActivity activity, MapButtonClickListener mapButtonClickListener, PlacePageController placePageController)
   {
     mButtonsFrame = frame.findViewById(R.id.navigation_buttons_inner);
     mZoomFrame = frame.findViewById(R.id.zoom_buttons_container);
@@ -56,7 +57,7 @@ public class MapButtonsController
                                                         () -> mapButtonClickListener.onClick(MapButtons.toggleMapLayer), activity);
 
     mNavAnimationController = new NavigationButtonsAnimationController(
-        mButtonsFrame, this::onTranslationChanged);
+        mButtonsFrame, placePageController, zoomInButton.getLayoutParams().width, this::onTranslationChanged);
 
     mSearchButtonFrame = activity.findViewById(R.id.search_button_frame);
     mSearchWheel = new SearchWheel(frame, (v) -> mapButtonClickListener.onClick(MapButtons.navSearch));
