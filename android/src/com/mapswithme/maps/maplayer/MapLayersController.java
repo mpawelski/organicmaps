@@ -37,7 +37,7 @@ public class MapLayersController
   private void initMode()
   {
     setEnabled(mCurrentLayer.isEnabled(mActivity));
-    showButton();
+    showButton(true);
   }
 
   @NonNull
@@ -79,18 +79,13 @@ public class MapLayersController
   public void toggleMode(@NonNull Mode mode)
   {
     setCurrentLayer(mode);
-    showButton();
+    showButton(true);
     setEnabled(!mode.isEnabled(mActivity));
   }
 
-  public void showButton()
+  public void showButton(boolean show)
   {
-    UiUtils.show(mLayersButton);
-  }
-
-  public void hideButton()
-  {
-    UiUtils.hide(mLayersButton);
+    UiUtils.showIf(show, mLayersButton);
   }
 
   public void adjust(int offsetX, int offsetY)
