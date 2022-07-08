@@ -1,16 +1,23 @@
 package com.mapswithme.maps;
 
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import com.mapswithme.maps.widget.placepage.PlacePageController;
+import com.mapswithme.util.log.Logger;
 
 public class NavigationButtonsAnimationController
 {
   @NonNull
   private final View mFrame;
+  @NonNull
+  private final View mZoomFrame;
+  @NonNull
+  private final View mLayersButton;
 
   @Nullable
   private final OnTranslationChangedListener mTranslationListener;
@@ -19,20 +26,24 @@ public class NavigationButtonsAnimationController
   private final int mButtonWidth;
   private float mContentHeight;
   private float mContentWidth;
+  private float mInitialButtonMargin;
 
   public NavigationButtonsAnimationController(@NonNull View frame,
+                                              @NonNull View zoomFrame,
+                                              @NonNull View layersButton,
                                               PlacePageController placePageController,
-                                              int buttonWidth,
                                               @Nullable OnTranslationChangedListener translationListener)
   {
     mFrame = frame;
+    mZoomFrame = zoomFrame;
+    mLayersButton = layersButton;
     // Used to get the maximum height the buttons will evolve in
     View contentView = (View) mFrame.getParent();
     contentView.addOnLayoutChangeListener(new ContentViewLayoutChangeListener(contentView));
     mTranslationListener = translationListener;
-    RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) frame.getLayoutParams();
-    mBottomMargin = lp.bottomMargin;
-    mButtonWidth = buttonWidth;
+    mBottomMargin = ((RelativeLayout.LayoutParams) frame.getLayoutParams()).bottomMargin;
+    mInitialButtonMargin = ((ConstraintLayout.LayoutParams) zoomFrame.getLayoutParams()).bottomMargin;
+    mButtonWidth = mLayersButton.getLayoutParams().width;
     mPlacePageController = placePageController;
   }
 
@@ -46,9 +57,18 @@ public class NavigationButtonsAnimationController
     if (mContentHeight == 0 || isScreenWideEnough())
       return;
 
+    // Move the buttons container to follow the place page
     final float translation = mBottomMargin + translationY - mContentHeight;
     final float appliedTranslation = translation <= 0 ? translation : 0;
     mFrame.setTranslationY(appliedTranslation);
+
+    // Reduce buttons margin to move them only if necessary
+    // Zoom frame is above the layers so if must move twice as much
+    final float appliedMarginTranslationLayers = Math.min(-appliedTranslation, mInitialButtonMargin);
+    final float appliedMarginTranslationZoomFrame = Math.min(-appliedTranslation, 2 * mInitialButtonMargin);
+    mLayersButton.setTranslationY(appliedMarginTranslationLayers);
+    mZoomFrame.setTranslationY(appliedMarginTranslationZoomFrame);
+
     update(appliedTranslation);
   }
 

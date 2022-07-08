@@ -57,7 +57,7 @@ public class MapButtonsController
                                                         () -> mapButtonClickListener.onClick(MapButtons.toggleMapLayer), activity);
 
     mNavAnimationController = new NavigationButtonsAnimationController(
-        mButtonsFrame, placePageController, zoomInButton.getLayoutParams().width, this::onTranslationChanged);
+        mButtonsFrame, mZoomFrame, mLayersButton, placePageController, this::onTranslationChanged);
 
     mSearchButtonFrame = activity.findViewById(R.id.search_button_frame);
     mSearchWheel = new SearchWheel(frame, (v) -> mapButtonClickListener.onClick(MapButtons.navSearch));
