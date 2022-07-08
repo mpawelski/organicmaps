@@ -2,6 +2,7 @@ package com.mapswithme.maps.maplayer;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
@@ -23,7 +24,7 @@ public class MapButtonsController
   @NonNull
   private final View mZoomFrame;
   @NonNull
-  private final View mLayersButton;
+  private final ImageButton mLayersButton;
   @NonNull
   private final View myPosition;
   @NonNull
