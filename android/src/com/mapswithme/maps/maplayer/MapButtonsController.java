@@ -50,10 +50,10 @@ public class MapButtonsController
     mButtonsFrame = frame.findViewById(R.id.navigation_buttons_inner);
     mZoomFrame = frame.findViewById(R.id.zoom_buttons_container);
     mPlacePageController = placePageController;
-    View zoomInButton = frame.findViewById(R.id.nav_zoom_in);
-    zoomInButton.setOnClickListener((v) -> mapButtonClickListener.onClick(MapButtons.zoomIn));
-    View zoomOutButton = frame.findViewById(R.id.nav_zoom_out);
-    zoomOutButton.setOnClickListener((v) -> mapButtonClickListener.onClick(MapButtons.zoomOut));
+    frame.findViewById(R.id.nav_zoom_in)
+         .setOnClickListener((v) -> mapButtonClickListener.onClick(MapButtons.zoomIn));
+    frame.findViewById(R.id.nav_zoom_out)
+         .setOnClickListener((v) -> mapButtonClickListener.onClick(MapButtons.zoomOut));
     myPosition = frame.findViewById(R.id.my_position);
     mNavMyPosition = new MyPositionButton(myPosition, (v) -> mapButtonClickListener.onClick(MapButtons.myPosition));
 
@@ -64,8 +64,7 @@ public class MapButtonsController
     mSearchButtonFrame = activity.findViewById(R.id.search_button_frame);
     mSearchWheel = new SearchWheel(frame, (v) -> mapButtonClickListener.onClick(MapButtons.navSearch));
     ImageView bookmarkButton = mSearchButtonFrame.findViewById(R.id.btn_bookmarks);
-    bookmarkButton.setImageDrawable(Graphics.tint(bookmarkButton.getContext(),
-                                                  R.drawable.ic_menu_bookmarks));
+    bookmarkButton.setImageDrawable(Graphics.tint(bookmarkButton.getContext(), R.drawable.ic_menu_bookmarks));
 
     // Used to get the maximum height the buttons will evolve in
     frame.addOnLayoutChangeListener(new MapButtonsController.ContentViewLayoutChangeListener(frame));
@@ -148,9 +147,7 @@ public class MapButtonsController
       showButton(true, MapButtons.zoom);
     }
     else
-    {
       UiUtils.hide(mButtonsFrame);
-    }
   }
 
   private boolean isInNavigationMode()
