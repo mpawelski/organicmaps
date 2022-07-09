@@ -64,6 +64,7 @@ public class MapButtonsController
     mSearchButtonFrame = activity.findViewById(R.id.search_button_frame);
     mSearchWheel = new SearchWheel(frame, (v) -> mapButtonClickListener.onClick(MapButtons.navSearch));
     ImageView bookmarkButton = mSearchButtonFrame.findViewById(R.id.btn_bookmarks);
+    bookmarkButton.setOnClickListener((v) -> mapButtonClickListener.onClick(MapButtons.navBookmarks));
     bookmarkButton.setImageDrawable(Graphics.tint(bookmarkButton.getContext(), R.drawable.ic_menu_bookmarks));
 
     // Used to get the maximum height the buttons will evolve in
