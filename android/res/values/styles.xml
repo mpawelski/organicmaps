@@ -13,6 +13,7 @@
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:backgroundTint">?cardBackground</item>
+    <item name="android:alpha">0.8</item>
     <item name="android:tint">?iconTint</item>
     <item name="fabCustomSize">48dp</item>
     <item name="borderWidth">0dp</item>
