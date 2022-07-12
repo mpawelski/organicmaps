@@ -189,7 +189,6 @@ public class MwmActivity extends BaseMwmFragmentActivity
   @SuppressWarnings("NotNullFieldNotInitialized")
   @NonNull
   private PlacePageController mPlacePageController;
-  @Nullable
   private MapButtonsController.LayoutMode mCurrentLayoutMode;
 
   public interface LeftAnimationTrackListener
@@ -380,6 +379,10 @@ public class MwmActivity extends BaseMwmFragmentActivity
     {
       mLocationErrorDialogAnnoying = savedInstanceState.getBoolean(EXTRA_LOCATION_DIALOG_IS_ANNOYING);
       mCurrentLayoutMode = MapButtonsController.LayoutMode.values()[savedInstanceState.getInt(EXTRA_CURRENT_LAYOUT_MODE)];
+    }
+    else
+    {
+      mCurrentLayoutMode = MapButtonsController.LayoutMode.regular;
     }
     mIsTabletLayout = getResources().getBoolean(R.bool.tabletLayout);
 

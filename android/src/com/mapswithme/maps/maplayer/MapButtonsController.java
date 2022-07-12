@@ -21,7 +21,6 @@ import com.mapswithme.maps.widget.menu.MyPositionButton;
 import com.mapswithme.maps.widget.placepage.PlacePageController;
 import com.mapswithme.util.Config;
 import com.mapswithme.util.UiUtils;
-import com.mapswithme.util.log.Logger;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,7 +29,6 @@ public class MapButtonsController extends Fragment
 {
   Map<MapButtons, View> mButtonsMap;
   private View mFrame;
-  private View mInnerButtonsFrame;
   private View mInnerLeftButtonsFrame;
   private View mInnerRightButtonsFrame;
   @Nullable
@@ -57,7 +55,6 @@ public class MapButtonsController extends Fragment
   @Override
   public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
   {
-    Logger.v("", "onCreateView: " + mLayoutMode);
     if (mLayoutMode == LayoutMode.navigation)
       mFrame = inflater.inflate(R.layout.map_buttons_layout_navigation, container, false);
     else if (mLayoutMode == LayoutMode.planning)
@@ -65,7 +62,6 @@ public class MapButtonsController extends Fragment
     else
       mFrame = inflater.inflate(R.layout.map_buttons_layout_regular, container, false);
 
-    mInnerButtonsFrame = mFrame.findViewById(R.id.map_buttons_inner);
     mInnerLeftButtonsFrame = mFrame.findViewById(R.id.map_buttons_inner_left);
     mInnerRightButtonsFrame = mFrame.findViewById(R.id.map_buttons_inner_right);
     mBottomButtonsFrame = mFrame.findViewById(R.id.map_buttons_bottom);
@@ -179,41 +175,53 @@ public class MapButtonsController extends Fragment
     BadgeUtils.attachBadgeDrawable(mBadgeDrawable, menuButton);
   }
 
-  private boolean isScreenWideEnough()
+  private boolean isBehindPlacePage(View v)
   {
-    final boolean isLeftEnough = mInnerLeftButtonsFrame == null || mContentWidth / 2 > (mPlacePageController.getPlacePageWidth() / 2)
-                                                                                       + mInnerLeftButtonsFrame.getWidth();
-    final boolean isRightEnough = mInnerRightButtonsFrame == null || mContentWidth / 2 > (mPlacePageController.getPlacePageWidth() / 2)
-                                                                                         + mInnerRightButtonsFrame.getWidth();
-    return isLeftEnough && isRightEnough;
+    return !(mContentWidth / 2 > (mPlacePageController.getPlacePageWidth() / 2) + v.getWidth());
+  }
+
+  private boolean isMoving(View v)
+  {
+    return v.getTranslationY() < 0;
   }
 
   public void move(float translationY)
   {
-    if (mContentHeight == 0 || isScreenWideEnough())
+    if (mContentHeight == 0)
       return;
 
-    // Move the buttons container to follow the place page
-    final float translation = translationY - mInnerButtonsFrame.getBottom();
-    final float appliedTranslation = translation <= 0 ? translation : 0;
-    mInnerButtonsFrame.setTranslationY(appliedTranslation);
+    // Move the buttons containers to follow the place page
+    if (mInnerRightButtonsFrame != null &&
+        (isBehindPlacePage(mInnerRightButtonsFrame) || isMoving(mInnerRightButtonsFrame)))
+      applyMove(mInnerRightButtonsFrame, translationY);
+    if (mInnerLeftButtonsFrame != null &&
+        (isBehindPlacePage(mInnerLeftButtonsFrame) || isMoving(mInnerLeftButtonsFrame)))
+      applyMove(mInnerLeftButtonsFrame, translationY);
+  }
 
-    updateButtonsVisibility(appliedTranslation);
+  private void applyMove(View frame, float translationY)
+  {
+    final float rightTranslation = translationY - frame.getBottom();
+    final float appliedTranslation = rightTranslation <= 0 ? rightTranslation : 0;
+    frame.setTranslationY(appliedTranslation);
+    updateButtonsVisibility(appliedTranslation, frame);
   }
 
   public void updateButtonsVisibility()
   {
-    updateButtonsVisibility(mInnerButtonsFrame.getTranslationY());
+    updateButtonsVisibility(mInnerLeftButtonsFrame.getTranslationY(), mInnerLeftButtonsFrame);
+    updateButtonsVisibility(mInnerRightButtonsFrame.getTranslationY(), mInnerRightButtonsFrame);
   }
 
-  private void updateButtonsVisibility(final float translation)
+  private void updateButtonsVisibility(final float translation, @Nullable View parent)
   {
+    if (parent == null)
+      return;
     for (Map.Entry<MapButtons, View> entry : mButtonsMap.entrySet())
     {
-      // Only move items inside the inner frame
-      // Top and bottom items should be static
-      if (entry.getValue().getParent().getParent() == mInnerButtonsFrame)
-        showButton(getViewTopOffset(translation, entry.getValue()) > 0, entry.getKey());
+      final View button = entry.getValue();
+      if (button.getParent() == parent)
+        showButton(getViewTopOffset(translation, button) > 0, entry.getKey());
     }
   }
 

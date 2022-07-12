@@ -30,6 +30,7 @@ public class SearchWheel implements View.OnClickListener
   @Nullable
   private View mSearchLayout;
   private final ImageView mSearchButton;
+  @Nullable
   private final View mTouchInterceptor;
 
   private boolean mIsExpanded;
@@ -110,7 +111,8 @@ public class SearchWheel implements View.OnClickListener
     mOnSearchPressedListener = onSearchPressedListener;
     mOnSearchCanceledListener = onSearchCanceledListener;
     mTouchInterceptor = mFrame.findViewById(R.id.touch_interceptor);
-    mTouchInterceptor.setOnClickListener(this);
+    if (mTouchInterceptor != null)
+      mTouchInterceptor.setOnClickListener(this);
     mSearchButton = mFrame.findViewById(R.id.btn_search);
     mSearchButton.setOnClickListener(this);
     refreshSearchVisibility();
@@ -200,7 +202,8 @@ public class SearchWheel implements View.OnClickListener
       final Animator animator = AnimatorInflater.loadAnimator(mSearchLayout.getContext(), animRes);
       animator.setTarget(mSearchLayout);
       animator.start();
-      UiUtils.visibleIf(mIsExpanded, mTouchInterceptor);
+      if (mTouchInterceptor != null)
+        UiUtils.visibleIf(mIsExpanded, mTouchInterceptor);
       animator.addListener(new UiUtils.SimpleAnimatorListener()
       {
         @Override
@@ -220,7 +223,8 @@ public class SearchWheel implements View.OnClickListener
       for (SearchOption searchOption : SearchOption.values())
         UiUtils.visibleIf(mIsExpanded, searchLayout.findViewById(searchOption.mResId));
 
-      UiUtils.visibleIf(mIsExpanded, mSearchLayout, mTouchInterceptor);
+      if (mTouchInterceptor != null)
+        UiUtils.visibleIf(mIsExpanded, mSearchLayout, mTouchInterceptor);
 
       if (mIsExpanded)
       {
