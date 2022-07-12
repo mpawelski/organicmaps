@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:id="@+id/map_buttons_navigation"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  tools:background="@color/bg_primary">
+  <View
+    android:id="@+id/touch_interceptor"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:visibility="gone"
+    tools:visibility="visible" />
+  <androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/map_buttons_inner"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="@dimen/action_bar_extended_height"
+    android:layout_marginBottom="@dimen/map_buttons_bottom_margin"
+    android:clipChildren="false"
+    android:clipToPadding="false"
+    android:layoutDirection="ltr"
+    android:padding="@dimen/nav_frame_padding">
+    <androidx.constraintlayout.widget.ConstraintLayout
+      android:id="@+id/map_buttons_inner_left"
+      android:layout_width="0dp"
+      android:layout_height="match_parent"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintLeft_toLeftOf="parent"
+      app:layout_constraintRight_toLeftOf="@+id/map_buttons_inner_right">
+      <include
+        layout="@layout/map_buttons_bookmarks"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/margin_half"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+      <include
+        layout="@layout/map_buttons_search"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/margin_half"
+        app:layout_constraintBottom_toTopOf="@+id/btn_bookmarks"
+        app:layout_constraintStart_toStartOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+      android:id="@+id/map_buttons_inner_right"
+      android:layout_width="0dp"
+      android:layout_height="match_parent"
+      app:layout_constraintLeft_toRightOf="@id/map_buttons_inner_left"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintRight_toRightOf="parent">
+      <include
+        layout="@layout/map_buttons_zoom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/margin_half"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+      <include
+        layout="@layout/map_buttons_myposition"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="@dimen/margin_half"
+        android:layout_marginBottom="@dimen/margin_half"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/zoom_buttons_container" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+  </androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>
