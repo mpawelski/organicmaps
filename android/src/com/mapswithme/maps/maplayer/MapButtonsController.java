@@ -194,7 +194,7 @@ public class MapButtonsController extends Fragment
 
   private boolean isBehindPlacePage(View v)
   {
-    return !(mContentWidth / 2 > (mPlacePageController.getPlacePageWidth() / 2) + v.getWidth());
+    return !(mContentWidth / 2 > (mPlacePageController.getPlacePageWidth() / 2.0) + v.getWidth());
   }
 
   private boolean isMoving(View v)
