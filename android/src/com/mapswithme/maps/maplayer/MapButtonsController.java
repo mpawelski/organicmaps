@@ -166,10 +166,12 @@ public class MapButtonsController extends Fragment
       return;
     final UpdateInfo info = MapManager.nativeGetUpdateInfo(null);
     final int count = (info == null ? 0 : info.filesCount);
+    final int verticalOffset = 20 + Integer.toString(count).length() * 15;
     BadgeUtils.detachBadgeDrawable(mBadgeDrawable, menuButton);
     mBadgeDrawable = BadgeDrawable.create(activity);
-    mBadgeDrawable.setHorizontalOffset(30);
-    mBadgeDrawable.setVerticalOffset(20);
+    mBadgeDrawable.setMaxCharacterCount(3);
+    mBadgeDrawable.setHorizontalOffset(verticalOffset);
+    mBadgeDrawable.setVerticalOffset(25);
     mBadgeDrawable.setNumber(count);
     mBadgeDrawable.setVisible(count > 0);
     BadgeUtils.attachBadgeDrawable(mBadgeDrawable, menuButton);
