@@ -1,6 +1,5 @@
 package com.mapswithme.maps.maplayer;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -91,7 +90,7 @@ public class MapButtonsController extends Fragment
       menuButton.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
         @Override
         public void onGlobalLayout() {
-          updateMarker();
+          updateMenuBadge();
           menuButton.getViewTreeObserver().removeOnGlobalLayoutListener(this);
         }
       });
@@ -175,7 +174,7 @@ public class MapButtonsController extends Fragment
   }
 
   @OptIn(markerClass = com.google.android.material.badge.ExperimentalBadgeUtils.class)
-  public void updateMarker()
+  public void updateMenuBadge()
   {
     View menuButton = mButtonsMap.get(MapButtons.menu);
     if (menuButton == null)
