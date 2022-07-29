@@ -628,8 +628,6 @@ public class MwmActivity extends BaseMwmFragmentActivity
       FragmentTransaction transaction = getSupportFragmentManager()
           .beginTransaction().replace(R.id.map_buttons, mMapButtonsController);
       transaction.commit();
-      // FIXME For some reason the first onResume does not make the badge appear
-      new Handler().postDelayed(() -> mMapButtonsController.updateMarker(this), 500);
     }
   }
 
@@ -1040,7 +1038,7 @@ public class MwmActivity extends BaseMwmFragmentActivity
       mOnmapDownloader.onResume();
 
     mNavigationController.onActivityResumed(this);
-    mMapButtonsController.onResume(this);
+    mMapButtonsController.onResume();
     mPlacePageController.onActivityResumed(this);
   }
 

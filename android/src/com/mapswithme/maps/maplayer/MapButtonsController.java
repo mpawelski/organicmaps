@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -84,7 +85,16 @@ public class MapButtonsController extends Fragment
     }
     View menuButton = mFrame.findViewById(R.id.menu_button);
     if (menuButton != null)
+    {
       menuButton.setOnClickListener((v) -> mMapButtonClickListener.onClick(MapButtons.menu));
+      menuButton.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+        @Override
+        public void onGlobalLayout() {
+          updateMarker();
+          menuButton.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+        }
+      });
+    }
     View helpButton = mFrame.findViewById(R.id.help_button);
     if (helpButton != null)
       helpButton.setOnClickListener((v) -> mMapButtonClickListener.onClick(MapButtons.help));
@@ -159,7 +169,7 @@ public class MapButtonsController extends Fragment
   }
 
   @OptIn(markerClass = com.google.android.material.badge.ExperimentalBadgeUtils.class)
-  public void updateMarker(@NonNull Activity activity)
+  public void updateMarker()
   {
     View menuButton = mButtonsMap.get(MapButtons.menu);
     if (menuButton == null)
@@ -168,7 +178,7 @@ public class MapButtonsController extends Fragment
     final int count = (info == null ? 0 : info.filesCount);
     final int verticalOffset = 20 + Integer.toString(count).length() * 15;
     BadgeUtils.detachBadgeDrawable(mBadgeDrawable, menuButton);
-    mBadgeDrawable = BadgeDrawable.create(activity);
+    mBadgeDrawable = BadgeDrawable.create(requireActivity());
     mBadgeDrawable.setMaxCharacterCount(3);
     mBadgeDrawable.setHorizontalOffset(verticalOffset);
     mBadgeDrawable.setVerticalOffset(25);
@@ -271,11 +281,10 @@ public class MapButtonsController extends Fragment
     return (int) (translation + v.getTop());
   }
 
-  public void onResume(@NonNull Activity activity)
+  public void onResume()
   {
-
+    super.onResume();
     mSearchWheel.onResume();
-    updateMarker(activity);
   }
 
   public void resetSearch()
