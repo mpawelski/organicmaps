@@ -2,6 +2,7 @@ package com.mapswithme.maps.maplayer;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -168,6 +169,11 @@ public class MapButtonsController extends Fragment
     }
   }
 
+  private int dpToPx(float dp)
+  {
+    return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, requireContext().getResources().getDisplayMetrics());
+  }
+
   @OptIn(markerClass = com.google.android.material.badge.ExperimentalBadgeUtils.class)
   public void updateMarker()
   {
@@ -176,12 +182,12 @@ public class MapButtonsController extends Fragment
       return;
     final UpdateInfo info = MapManager.nativeGetUpdateInfo(null);
     final int count = (info == null ? 0 : info.filesCount);
-    final int verticalOffset = 20 + Integer.toString(count).length() * 15;
+    final int verticalOffset = dpToPx(8) + dpToPx(Integer.toString(count).length() * 5);
     BadgeUtils.detachBadgeDrawable(mBadgeDrawable, menuButton);
     mBadgeDrawable = BadgeDrawable.create(requireActivity());
     mBadgeDrawable.setMaxCharacterCount(3);
     mBadgeDrawable.setHorizontalOffset(verticalOffset);
-    mBadgeDrawable.setVerticalOffset(25);
+    mBadgeDrawable.setVerticalOffset(dpToPx(9));
     mBadgeDrawable.setNumber(count);
     mBadgeDrawable.setVisible(count > 0);
     BadgeUtils.attachBadgeDrawable(mBadgeDrawable, menuButton);
